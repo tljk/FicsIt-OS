@@ -44,9 +44,7 @@ while true do
 		eventLib.handleEvent(table.unpack(e))
 		e = {event.pull(0)}
 	end
-	computer.skip()
 	while eventLib.pull() do end
-	computer.skip()
 	local now = computer.millis()
 	if now - lastDraw > 100 then
 		gui.getWindowManager():paint()

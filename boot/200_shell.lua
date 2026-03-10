@@ -9,14 +9,12 @@ process.createPipe(prog, terminal)
 process.createPipe(terminal, prog)
 
 while true do
-	computer.skip()
 	process.handleProcesses()
 	local canSleep = thread.tick()
 	local timeout = 0
 	if canSleep then
 		timeout = 0.0
 	end
-	computer.skip()
 	if console then
 		console.process = prog
 		console:handleInput(event.pull(timeout))

@@ -99,7 +99,6 @@ function console.readTillCPR(stream, text)
 			end
 		else
 			coroutine.yield()
-			computer.skip()
 		end
 	end
 end
@@ -162,7 +161,6 @@ function console.readLine(input, output, extensionFunc)
 				output:write("\x1B[" .. startY .. ";" .. startX .. "H\x1B[J" .. inputText .. "\x1B[" .. cursorOffset .. "D")
 			end
 			coroutine.yield()
-			computer.skip()
 		end
 	end
 end

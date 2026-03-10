@@ -286,7 +286,6 @@ function term.createTTY(input, output)
 		self.buffer = self.buffer .. text
 		local token, tokendata
 		while self.buffer:len() > 0 do
-			computer.skip()
 			-- get end of this draw line from text
 			self.buffer, token, tokendata = term.nextToken(self.buffer)
 			if token == "newline" then

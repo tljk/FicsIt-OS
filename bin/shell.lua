@@ -98,7 +98,7 @@ while true do
 	end)
 	addHistory(cmd)
 	historyOffset = -1
-	local status_code, err, ret = (xpcall or pcall)(function()
+	local status_code, err, ret = pcall(function()
 		shell.execute(cmd)
 	end)
 	if not status_code then

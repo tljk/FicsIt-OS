@@ -316,31 +316,27 @@ function term.createTTY(input, output)
 	function obj:setCursorVisibility(visibility)
 		self.cursorVisible = visibility
 	end
-	
-	function obj:paint(buffer)
-		local w, h = buffer:getSize()
-		self.lastScreenWidth = w
-		self.lastScreenHeight = h
-		buffer:fill(0, 0, w, h, " ", nil, backgroundColor)
+
+	function obj:paint(gpu)
+		local fontSize = 10
+		local screenSize = gpu:getScreenSize()
+		local textSize = gpu:measureText("1", fontSize, true)
+		local h = math.floor(screenSize.y // textSize.y)
+		self.lastScreenWidth = math.floor(screenSize.x // textSize.x)
+		self.lastScreenHeight = math.floor(screenSize.y // textSize.y)
+
 		local lineIndex = #self.cachedLines - math.clamp(self.scroll, 0, math.max(0, #self.cachedLines - h))
 		local y = h - math.max(0, h - #self.cachedLines)
+
 		while y > 0 do
 			local line = self.cachedLines[lineIndex]
-			
-			buffer:setText(0, y-1, line, {1,1,1,1}, nil)
-			
+			gpu:drawText({0, textSize.y*(y-1)}, line, fontSize, {1,1,1,1}, true)
+
 			if lineIndex == self.cursorPosY and self.cursorVisible then
-				c, f, b = buffer:get(self.cursorPosX-1, y-1)
-				if not f or f.a <= 0 then
-					f = {1,1,1,1}
-				end
-				if not b or b.a <= 0 then
-					b = {0,0,0,1}
-				end
-				
-				buffer:set(self.cursorPosX-1, y-1, c, b, f)
+				local lineWithCursor = string.rep(" ", self.cursorPosX-1).."_"
+				gpu:drawText({0, textSize.y*(y-1)}, lineWithCursor, fontSize, {1,1,1,1}, true)
 			end
-			
+
 			lineIndex = lineIndex - 1
 			if lineIndex < 1 then
 				break

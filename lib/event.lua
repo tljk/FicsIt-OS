@@ -49,7 +49,6 @@ function eventLib.handleEvent(name, sender, ...)
 	if not name or not sender then
 		return
 	end
-	print(name)
 	local sub = _eventSubscriptions[name]
 	if not sub then return end
 	for thread, _ in pairs(sub) do

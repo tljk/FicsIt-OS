@@ -1,6 +1,7 @@
 local thread = require("thread")
 local shell  = require("shell")
 local process = require("process")
+local eventLib = require("event")
 
 shell.getInput().isTTY = true
 local prog = process.create(filesystem.loadFile("/bin/shell.lua"))
@@ -17,6 +18,6 @@ while true do
 	end
 	if console then
 		console.process = prog
-		console:handleInput(event.pull(timeout))
+		eventLib.handleEvent(event.pull(timeout))
 	end
 end

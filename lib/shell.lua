@@ -319,8 +319,13 @@ local builtInCommands = {}
 
 function builtInCommands.cd(...)
 	local p = process.running()
-	
-	p.environment["PWD"] = filesystem.path(1, p.environment["PWD"], ...)
+	local path = filesystem.path(1, p.environment["PWD"], ...)
+	if filesystem.isDir(path) then
+		p.environment["PWD"] = filesystem.path(1, p.environment["PWD"], ...)
+	else
+		local shell = require("shell")
+		shell.writeLine("Not a directory")
+	end
 end
 
 function shell.executeCommand(command)
@@ -336,10 +341,14 @@ function shell.executeCommand(command)
 		local path = filesystem.path(progName)
 		if not filesystem.isFile(path) then
 			path = util.findScriptPath(progName, "/bin/")
-			if not path then
-				shell.writeLine("Command not found")
-				return -1
-			end
+		end
+		if not path then
+			local p = process.running()
+			path = util.findScriptPath(progName, p.environment["PWD"].."/")
+		end
+		if not path then
+			shell.writeLine("Command not found")
+			return -1
 		end
 		local prog = filesystem.loadFile(path)
 		if type(prog) ~= "function" then

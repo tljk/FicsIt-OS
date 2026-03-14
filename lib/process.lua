@@ -115,7 +115,7 @@ function process.create(func, ...)
 	if p.parent then
 		p.stdInput = p.parent.stdInput
 		p.stdOutput = p.parent.stdOutput
-		p.environment = util.deepCopy(p.environment)
+		p.environment = util.deepCopy(p.parent.environment)
 	else
 		local stream = process.serialStream()
 		p.stdInput = buffer.create("r", stream)

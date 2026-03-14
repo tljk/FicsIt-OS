@@ -40,7 +40,7 @@ function util.string.endsWith(str, ending)
 end
 
 function util.findScriptPath(scriptPath, sysPath)
-	local path = sysPath .. scriptPath
+	local path = filesystem.path(1, sysPath .. scriptPath)
 	if not filesystem.isFile(path) then
 		path = path .. ".lua"
 		if not filesystem.isFile(path) then
